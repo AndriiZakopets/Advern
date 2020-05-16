@@ -1,0 +1,33 @@
+{
+  "name": "advern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndriyZakopets/Advern.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndriyZakopets/Advern/issues"
+  },
+  "homepage": "https://github.com/AndriyZakopets/Advern#readme",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/register": "^7.9.0",
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.3"
+  }
+}

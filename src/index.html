@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <noscript
+      >You need to enable JavaScript to run this app.</noscript
+    >
+    <div id="root">asd</div>
+    <script>
+      void (async function () {
+        const resp = await fetch('http://localhost/api/subscribers', {
+          method: 'POST',
+          body: JSON.stringify({ name: 'dsa' }),
+        });
+        console.log(resp.body);
+      })();
+    </script>
+  </body>
+</html>
