@@ -1,37 +1,39 @@
 import express from 'express';
 import path from 'path';
-import config from 'config';
-import modules from './modules';
+import config from './config';
+import router from './router';
 import mongoose from 'mongoose';
+import * as yup from 'yup';
+
+yup.addMethod(yup.mixed, 'defined', function (msg) {
+  return this.test('defined', msg, (value) => value !== undefined);
+});
+
+const PORT = config.port;
 
 const app = express();
 
-const PORT = config.get('port') || 6000;
+async function start() {
+  try {
+    await mongoose.connect(config.mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
 
-// async function start() {
-//   try {
-//     // await mongoose.connect(config.get('mongoUri'), {});
-//   } catch (e) {
-//     console.log('Server Error', e.message);
-//     process.exit(1);
-//   }
-// }
-
-// start();
-
-mongoose.connect(config.get('mongoUri'), {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on('error', (error) => console.error(error));
-db.once('open', () => console.log('Connected to Database'));
+    app.listen(PORT, () =>
+      console.log(`Server has been started on port ${PORT}...`),
+    );
+  } catch (err) {
+    console.error('Server Error: ', err.message);
+    process.exit(1);
+  }
+}
+start();
 
 app.use(express.json());
-app.use('/api', modules);
+app.use('/api', router);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/index.html`));
 });
-
-app.listen(PORT);

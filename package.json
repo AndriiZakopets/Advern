@@ -19,9 +19,12 @@
   "homepage": "https://github.com/AndriyZakopets/Advern#readme",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "config": "^3.3.1",
+    "bcrypt": "^4.0.1",
     "express": "^4.17.1",
-    "mongoose": "^5.9.13"
+    "express-validator": "^6.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.13",
+    "yup": "^0.28.5"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
