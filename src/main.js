@@ -15,7 +15,7 @@ const app = express();
 
 async function start() {
   try {
-    await mongoose.connect(config.mongoUri, {
+    const db = await mongoose.connect(config.mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,

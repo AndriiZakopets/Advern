@@ -5,7 +5,7 @@ import * as passwords from '../../services/passwords';
 
 const createToken = (user) =>
   jwt.sign({ userId: user.id }, config.jwtSecret, {
-    expiresIn: '1h',
+    expiresIn: '7d',
   });
 
 export const register = async (req, res) => {
@@ -15,7 +15,7 @@ export const register = async (req, res) => {
     const candidate = await User.findOne({ email });
 
     if (candidate) {
-      return res.status(400).json({ error: 'Email is already used' });
+      return res.status(400).send({ error: 'Email is already used' });
     }
 
     const passwordHash = await passwords.hash(password);
@@ -28,9 +28,10 @@ export const register = async (req, res) => {
 
     const token = createToken(user);
 
-    res.status(201).json({ token, user: user.accountView() });
+    res.cookie('token', token, { httpOnly: true });
+    res.status(201).send({ token, user: user.accountView() });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).send({ message: err.message });
   }
 };
 
@@ -41,7 +42,7 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ error: 'User does not exist' });
+      return res.status(400).send({ error: 'User does not exist' });
     }
 
     const isPasswordMatch = await passwords.compare(
@@ -50,15 +51,16 @@ export const login = async (req, res) => {
     );
 
     if (!isPasswordMatch) {
-      return res.status(400).json({
+      return res.status(400).send({
         error: 'That password was incorrect. Please try again.',
       });
     }
 
     const token = createToken(user);
 
-    res.json({ token, user: user.accountView() });
+    res.cookie('token', token, { httpOnly: true });
+    res.send({ token, user: user.accountView() });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).send({ message: err.message });
   }
 };

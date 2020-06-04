@@ -4,7 +4,7 @@ export const updateAccountSchema = yup
   .object()
   .shape({
     title: yup
-      .string('asd')
+      .string()
       .required(`body should have required property 'title'`),
     description: yup
       .string()

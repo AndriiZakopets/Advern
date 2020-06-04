@@ -2,25 +2,29 @@ import User from '../../models/User';
 
 export async function getAccount(req, res) {
   try {
-    const { userId } = req.user;
+    const user = await User.findById(req.user.userId);
 
-    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send({ error: 'User not found' });
+    }
 
     res.send(user.accountView());
   } catch (err) {
-    res.status(404).send({ error: 'User not found' });
+    res.status(500).send({ error: err.message });
   }
 }
 
 export async function updateAccount(req, res) {
-  const { userId } = req.user;
+  try {
+    await User.updateOne(
+      { _id: req.user.userId },
+      { ...req.body, updatedAt: Date.now() },
+    );
 
-  await User.updateMany(
-    { _id: userId },
-    { ...req.body, updatedAt: Date.now() },
-  );
+    const user = await User.findById(req.user.userId);
 
-  const user = await User.findById(userId);
-
-  res.json(user.accountView());
+    res.json(user.accountView());
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 }
