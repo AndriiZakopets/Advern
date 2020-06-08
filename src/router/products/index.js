@@ -11,6 +11,11 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 router.get('/ids', handlers.getProductsByIds);
 router.get('/', handlers.getProducts);
 router.get('/:productId', handlers.getProductById);
+router.delete(
+  '/:productId',
+  requiredAuth,
+  handlers.deleteProductById,
+);
 router.post(
   '/',
   urlencodedParser,

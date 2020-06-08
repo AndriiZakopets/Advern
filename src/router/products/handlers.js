@@ -1,4 +1,5 @@
 import Product from '../../models/Product';
+import User from '../../models/User';
 import { getPage } from '../helpers';
 import fs from 'fs';
 
@@ -21,8 +22,20 @@ export async function getProductById(req, res) {
     if (!product) {
       return res.status(404).send({ error: 'Product not found' });
     }
+    const owner = await User.findById(product.ownerId);
 
-    res.send(product.productView());
+    res.send({ ...product.productView(), owner: owner.userView() });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+}
+
+export async function deleteProductById(req, res) {
+  try {
+    console.log('delete');
+    const a = await Product.deleteOne({ _id: req.params.productId });
+    console.log(a);
+    res.send('ok');
   } catch (err) {
     res.status(500).send({ error: err.message });
   }

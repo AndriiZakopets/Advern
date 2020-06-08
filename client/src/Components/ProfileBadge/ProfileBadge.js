@@ -60,9 +60,7 @@ const ProfileBadge = () => {
       {isOpen && (
         <div className={s.dropDown} ref={dropdownRef}>
           <ul className={s.dropDown__list}>
-            <Link to={`/accounts/${user.id}`}>
-              <li>{user.fullName}</li>
-            </Link>
+            <li>{user.fullName}</li>
             <Link to={`${routes.editAccount}`}>
               <li>Edit profile</li>
             </Link>

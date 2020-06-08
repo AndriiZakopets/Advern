@@ -1,6 +1,9 @@
 import { createAsyncActions } from '@letapp/redux-actions';
 
 export const addProduct = createAsyncActions('products/ADD_PRODUCT');
+export const deleteProduct = createAsyncActions(
+  'products/DELETE_PRODUCT',
+);
 export const getProducts = createAsyncActions(
   'products/GET_PRODUCTS',
 );

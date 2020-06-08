@@ -21,4 +21,9 @@ export const getProduct = asyncOperationFactory(
   actions.getProduct,
 );
 
+export const deleteProduct = asyncOperationFactory(
+  Products.deleteProduct,
+  actions.deleteProduct,
+);
+
 export { actions };

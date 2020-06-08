@@ -21,18 +21,18 @@
       padding: 6px 0;
       margin: 0;
 
+      li {
+        padding: 6px 20px 6px 10px;
+        color: #fff;
+        white-space: nowrap;
+      }
+
       a {
         text-decoration: none;
         margin: 0;
 
-        li {
-          &:hover {
-            background-color: #222;
-          }
-
-          padding: 6px 20px 6px 10px;
-          color: #fff;
-          white-space: nowrap;
+        li:hover {
+          background-color: #222;
         }
       }
     }
