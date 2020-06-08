@@ -1,0 +1,16 @@
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Helvetica;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 40px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 50%;
+
+  span {
+    margin: auto;
+  }
+}

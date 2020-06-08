@@ -1,5 +1,6 @@
 import User from '../../models/User';
 import Product from '../../models/Product';
+import { getPage } from '../helpers';
 
 export async function getUserProducts(req, res) {
   try {

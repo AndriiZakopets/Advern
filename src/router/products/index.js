@@ -1,16 +1,19 @@
 import express from 'express';
 import * as handlers from './handlers';
+import bodyParser from 'body-parser';
 import * as validators from './validators';
 import { requiredAuth } from '../middleware';
 
 const router = express.Router();
 
-router.get('/latest', handlers.getLatestProducts);
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 router.get('/ids', handlers.getProductsByIds);
-router.get('/search', handlers.searchProducts);
+router.get('/', handlers.getProducts);
 router.get('/:productId', handlers.getProductById);
 router.post(
   '/',
+  urlencodedParser,
   requiredAuth,
   validators.createProduct,
   handlers.createProduct,

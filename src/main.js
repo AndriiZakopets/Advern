@@ -1,4 +1,5 @@
 import express from 'express';
+import formData from 'express-form-data';
 import path from 'path';
 import config from './config';
 import router from './router';
@@ -31,9 +32,12 @@ async function start() {
 }
 start();
 
+app.use(formData.parse());
 app.use(express.json());
 app.use('/api', router);
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/index.html`));
+app.use(express.static(path.join(`${__dirname}/../client/build`)));
+
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });

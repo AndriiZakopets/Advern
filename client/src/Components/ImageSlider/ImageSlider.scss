@@ -1,0 +1,26 @@
+.imageSliderContainer {
+  width: 400px;
+  height: 400px;
+}
+
+.slick-slide {
+  div {
+    width: 400px;
+    height: 400px;
+
+    img {
+      height: 100%;
+      object-fit: cover;
+      margin: auto;
+    }
+  }
+}
+
+.slick-prev {
+  left: 5px;
+  z-index: 1;
+}
+
+.slick-next {
+  right: 5px;
+}

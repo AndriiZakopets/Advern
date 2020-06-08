@@ -1,28 +1,6 @@
 import Product from '../../models/Product';
-
-export async function getLatestProducts(req, res) {
-  const offset = +(req.query.offset ?? 0);
-  const limit = +(req.query.limit ?? 20);
-
-  const products = (await Product.find({})).sort((a, b) => {
-    const aTime = a.updatedAt ?? a.createdAt;
-    const bTime = b.updatedAt ?? b.createdAt;
-
-    return bTime - aTime;
-  });
-
-  const sendData = [];
-
-  for (
-    let i = offset;
-    i < limit + offset && i < products.length;
-    i++
-  ) {
-    sendData.push(products[i].productView());
-  }
-
-  res.send(sendData);
-}
+import { getPage } from '../helpers';
+import fs from 'fs';
 
 export async function getProductsByIds(req, res) {
   try {
@@ -50,62 +28,67 @@ export async function getProductById(req, res) {
   }
 }
 
-export async function searchProducts(req, res) {
-  const offset = +(req.query.offset ?? 0);
-  const limit = +(req.query.limit ?? 20);
+export async function getProducts(req, res) {
   const priceFrom = +(req.query.priceFrom ?? 0);
   const priceTo = +(req.query.priceTo ?? Infinity);
   const location = req.query.location ?? '';
   const keywords = req.query.keywords ?? '';
 
-  console.log(priceFrom, priceTo);
+  const products = (
+    await Product.find({
+      $or: [
+        {
+          title: {
+            $regex: keywords,
+            $options: 'i',
+          },
+        },
+        {
+          description: {
+            $regex: keywords,
+            $options: 'i',
+          },
+        },
+      ],
+      location: {
+        $regex: `${location}`,
+        $options: 'i',
+      },
+      price: {
+        $gte: priceFrom,
+        $lte: priceTo,
+      },
+    })
+  ).sort((a, b) => {
+    const aTime = a.updatedAt ?? a.createdAt;
+    const bTime = b.updatedAt ?? b.createdAt;
 
-  const products = await Product.find({
-    $or: [
-      {
-        title: {
-          $regex: keywords,
-          $options: 'i',
-        },
-      },
-      {
-        description: {
-          $regex: keywords,
-          $options: 'i',
-        },
-      },
-    ],
-    location: {
-      $regex: `${location}`,
-      $options: 'i',
-    },
-    price: {
-      $gte: priceFrom,
-      $lte: priceTo,
-    },
+    return bTime - aTime;
   });
 
-  const sendData = [];
-
-  for (
-    let i = offset;
-    i < limit + offset && i < products.length;
-    i++
-  ) {
-    sendData.push(products[i].productView());
-  }
-
-  res.send(sendData);
+  res.send(products.map((e) => e.productView()));
 }
 
 export async function createProduct(req, res) {
   try {
+    const photos = [];
+    for (const i of Object.getOwnPropertyNames(req.files)) {
+      const img = req.files[i];
+      console.log(img);
+      photos.push(
+        `data:${img.type};base64,${fs
+          .readFileSync(req.files[i].path)
+          .toString('base64')}`,
+      );
+    }
+
     const product = await Product.create({
       ownerId: req.user.userId,
+      photos,
       ...req.body,
     });
 
-    res.status(201).send(product.productView());
+    res.send(product.productView());
   } catch (err) {
     res.status(500).send({ error: err.message });
   }

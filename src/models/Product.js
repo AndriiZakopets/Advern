@@ -7,12 +7,11 @@ const schema = new Schema({
     required: true,
     indexes: { title: 'text', type: 'text' },
   },
-  location: { type: String, required: true, default: '' },
+  location: { type: String, required: true },
   price: { type: Number, default: 0 },
   description: { type: String, default: '' },
   photos: { type: [String], default: [] },
   createdAt: { type: Date, required: true, default: Date.now },
-  updatedAt: { type: Date, default: null },
 });
 
 schema.methods.productView = function () {
@@ -25,7 +24,6 @@ schema.methods.productView = function () {
     description: this.description,
     photos: this.photos,
     createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
   };
 };
 

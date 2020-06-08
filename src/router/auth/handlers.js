@@ -4,9 +4,7 @@ import User from '../../models/User';
 import * as passwords from '../../services/passwords';
 
 const createToken = (user) =>
-  jwt.sign({ userId: user.id }, config.jwtSecret, {
-    expiresIn: '7d',
-  });
+  jwt.sign({ userId: user.id }, config.jwtSecret);
 
 export const register = async (req, res) => {
   try {
@@ -28,7 +26,6 @@ export const register = async (req, res) => {
 
     const token = createToken(user);
 
-    res.cookie('token', token, { httpOnly: true });
     res.status(201).send({ token, user: user.accountView() });
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -42,7 +39,9 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).send({ error: 'User does not exist' });
+      return res
+        .status(400)
+        .send({ error: 'User with this email does not exist' });
     }
 
     const isPasswordMatch = await passwords.compare(
@@ -58,7 +57,6 @@ export const login = async (req, res) => {
 
     const token = createToken(user);
 
-    res.cookie('token', token, { httpOnly: true });
     res.send({ token, user: user.accountView() });
   } catch (err) {
     res.status(500).send({ message: err.message });

@@ -7,9 +7,6 @@ export const updateAccountSchema = yup
       .string()
       .defined(`body should have required property 'fullName'`)
       .min(1, 'Name can not be blank.'),
-    avatar: yup
-      .string()
-      .defined(`body should have required property 'avatar'`),
     phone: yup
       .string()
       .defined(`body should have required property 'phone'`),
