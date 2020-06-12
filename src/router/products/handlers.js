@@ -1,6 +1,5 @@
 import Product from '../../models/Product';
 import User from '../../models/User';
-import { getPage } from '../helpers';
 import fs from 'fs';
 
 export async function getProductsByIds(req, res) {
@@ -24,7 +23,10 @@ export async function getProductById(req, res) {
     }
     const owner = await User.findById(product.ownerId);
 
-    res.send({ ...product.productView(), owner: owner.userView() });
+    res.send({
+      ...product.productView(),
+      owner: owner.accountView(),
+    });
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
@@ -87,7 +89,7 @@ export async function createProduct(req, res) {
     const photos = [];
     for (const i of Object.getOwnPropertyNames(req.files)) {
       const img = req.files[i];
-      console.log(img);
+
       photos.push(
         `data:${img.type};base64,${fs
           .readFileSync(req.files[i].path)

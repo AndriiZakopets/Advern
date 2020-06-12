@@ -46,8 +46,10 @@ const Product = (props) => {
               <FontAwesomeIcon icon={faTimes} />
             </div>
           )}
-          {product.photos.length > 0 && (
+          {product.photos.length > 0 ? (
             <ImageSlider photos={product.photos} />
+          ) : (
+            'No photos.'
           )}
           <h1 className={s.productContainer__title}>
             {product.title}

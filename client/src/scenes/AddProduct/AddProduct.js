@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -39,8 +39,10 @@ const AddProduct = () => {
       formData.append('description', description);
       formData.append('price', +price);
       photos.forEach((photo, i) => {
+        console.log(i, photo);
         formData.append(i, photo);
       });
+      formData.append('end', photos[0]);
 
       dispatch(productsOperations.addProduct(formData));
     } catch (err) {

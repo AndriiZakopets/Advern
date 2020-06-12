@@ -1,6 +1,6 @@
 export default {
   port: process.env.PORT || 80,
-  mongoUri: 'mongodb://localhost/advern',
+  mongoUri: 'mongodb://localhost:27017/advern',
 
   hash: {
     bcrypt: {
